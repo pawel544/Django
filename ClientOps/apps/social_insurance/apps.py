@@ -2,4 +2,5 @@ from django.apps import AppConfig
 
 
 class SocialInsuranceConfig(AppConfig):
-    name = 'social_insurance'
+    default_auto_field = 'django.db.models.BigAutoField'
+    name = 'apps.social_insurance'

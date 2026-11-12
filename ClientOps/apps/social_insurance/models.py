@@ -1,6 +1,6 @@
 from django.db import models
 
-from ClientOps.apps.employee.models import Employee
+from ..employee.models import Employee
 
 
 # Create your models here.

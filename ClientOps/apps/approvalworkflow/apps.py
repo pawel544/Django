@@ -1,5 +1,6 @@
 from django.apps import AppConfig
 
 
-class approvalworkflowConfig(AppConfig):
-    name = 'approvalworkflow'
+class ApprovalWorkflowConfig(AppConfig):
+    default_auto_field = 'django.db.models.BigAutoField'
+    name = 'apps.approvalworkflow'

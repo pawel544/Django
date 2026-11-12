@@ -2,4 +2,5 @@ from django.apps import AppConfig
 
 
 class RegistrationGateConfig(AppConfig):
-    name = 'registration_gate'
+    default_auto_field = 'django.db.models.BigAutoField'
+    name = 'apps.registration_gate'

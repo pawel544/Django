@@ -1,7 +1,7 @@
 from django.db import models
 
-from ClientOps.apps.employee.models import Employee
-from ...ClientOps.settings import AUTH_USER_MODEL
+from ..employee.models import Employee
+from django.conf import settings
 
 # Create your models here.
 
@@ -19,7 +19,7 @@ class RegistrationBlock(models.Model):
     reason = models.TextField(null=True, blank=True)
     submitted_at = models.DateTimeField(null=True, blank=True)
     reviewed_at = models.DateTimeField(null=True, blank=True)
-    approved_by = models.ForeignKey(AUTH_USER_MODEL,on_delete=models.PROTECT,null=True,blank=True,
+    approved_by = models.ForeignKey(settings.AUTH_USER_MODEL,on_delete=models.PROTECT,null=True,blank=True,
         related_name="approved_registrations")
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
