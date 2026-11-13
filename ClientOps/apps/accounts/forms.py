@@ -17,8 +17,8 @@ class RegistrationForm(UserCreationForm):
                                 widget=forms.PasswordInput(attrs={'class': 'form-control'}))
     password2 = forms.CharField(min_length=5, max_length=45, required=True,
                                 widget=forms.PasswordInput(attrs={'class': 'form-control'}))
-    role=forms.ChoiceField(min_length=5, max_length=50, required=True,
-                         choices=User.ROLE_CHOICES, widget=forms.Select())
+    #role=forms.ChoiceField(min_length=5, max_length=50, required=True,
+                     #    choices=User.ROLE_CHOICES, widget=forms.Select())
     class Meta:
         model = User
         fields = ( 'email', 'first_name', 'last_name', 'password1', 'password2', 'role')
@@ -34,6 +34,11 @@ class ChangePasswordForm(UserChangeForm):
 
 
 class LoginForm(AuthenticationForm):
-    class Meta:
-        model = User
-        fields = ('email', 'password')
+    username =  forms.EmailField(
+        label='Email',
+        widget=forms.EmailInput(attrs={'class': 'form-control', 'placeholder': 'Email'}),
+        )
+    password = forms.CharField(
+        label='Password',
+        widget=forms.PasswordInput(attrs={'class': 'form-control', 'placeholder': 'Password'}),
+    )

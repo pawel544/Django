@@ -15,18 +15,19 @@ def is_admin(user):
             user.role== "Admin" )
 
 def login_user(request):
-    logger.info("Method: %s | GET: %s | POST: %s | URL: %s | User: %s",
-                request.method,
-                request.GET,
-                request.POST,
-                request.path,
-                request.user.email)
+    logger.info(
+        "Method: %s | URL: %s | Authenticated: %s | User: %s",
+        request.method,
+        request.path,
+        request.user.is_authenticated,
+        getattr(request.user, "email", "AnonymousUser")
+    )
     if request.user.is_authenticated :
         return redirect(to='/index')
 
     if request.method == 'POST':
         form = LoginForm(request=request, data=request.POST)
-        email = request.POST.get("username")
+        email = request.POST.get("email")
         try:
             user = User.objects.get(email=email)
         except User.DoesNotExist:
@@ -59,7 +60,7 @@ def login_user(request):
                 messages.error(request, 'Email or password did not match')
     else:
         form = LoginForm()
-    return render(request ,'user/login.html', context={'form':form})
+    return render(request ,'login.html', context={'form':form})
 @login_required
 def logout_user(request):
     logger.info("Method: %s | GET: %s | POST: %s | URL: %s | User: %s",
