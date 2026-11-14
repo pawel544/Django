@@ -4,6 +4,7 @@ from django.contrib.auth.decorators import login_required, user_passes_test
 from django.contrib.auth import update_session_auth_hash
 from django.contrib import messages
 from .forms import LoginForm, RegistrationForm, ChangePasswordForm
+from django.contrib.auth.forms import PasswordChangeForm
 import structlog
 from ..employee.models import Employee
 # Create your views here.
@@ -23,7 +24,7 @@ def login_user(request):
         getattr(request.user, "email", "AnonymousUser")
     )
     if request.user.is_authenticated :
-        return redirect(to='/index')
+        return redirect(to='signupuser.html')
 
     if request.method == 'POST':
         form = LoginForm(request=request, data=request.POST)
@@ -41,9 +42,9 @@ def login_user(request):
             user.save(update_fields=['number_login'])
             login(request, user)
             if user.first_login:
-                return redirect('user:change_password')
+                return redirect('/change_password')
 
-            return redirect('/index')
+            return redirect('/signupuser.html')
 
         else:
             if user:
@@ -74,12 +75,12 @@ def logout_user(request):
 
 @user_passes_test(is_admin)
 def signupuser(request):
-    logger.info("Method: %s | GET: %s | POST: %s | URL: %s | User: %s",
-                request.method,
-                request.GET,
-                request.POST,
-                request.path,
-                request.user.email)
+    #logger.info("Method: %s | GET: %s | POST: %s | URL: %s | User: %s",
+     #           request.method,
+      #          request.GET,
+       #         request.POST,
+        #        request.path,
+         #       )
     if request.method == 'POST':
 
         form = RegistrationForm( data=request.POST)
@@ -89,7 +90,7 @@ def signupuser(request):
             return redirect('user:register')
     else:
        form = RegistrationForm()
-    return render(request ,'user/signup.html', context={'form':form})
+    return render(request ,'signupuser.html', context={'form':form})
 
 
 
@@ -102,7 +103,7 @@ def change_password(request):
                 request.path,
                 request.user.email)
     if request.method == 'POST':
-        form = ChangePasswordForm(user= request.user  ,data=request.POST)
+        form = PasswordChangeForm(user= request.user  ,data=request.POST)
         if form.is_valid():
             user = form.save()
             user.first_login = False
@@ -112,5 +113,5 @@ def change_password(request):
             messages.success(request, 'Password changed successfully')
             return redirect('/index')
     else:
-        form = ChangePasswordForm(user= request.user )
-    return render(request, 'user/change_password.html', {"form":form})
+        form = PasswordChangeForm(user= request.user )
+    return render(request, 'change_password.html', {"form":form})

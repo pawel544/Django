@@ -8,15 +8,15 @@ User = get_user_model()
 class RegistrationForm(UserCreationForm):
     email = forms.EmailField(min_length=5, max_length=50, required=True,
                              help_text='Required. Inform a valid email address.',
-                             widget=forms.TextInput(attrs={'class': 'form-control'}))
+                             widget=forms.TextInput(attrs={'class': 'form-control', "placeholder": "Email"}))
     first_name = forms.CharField(min_length=5, max_length=30, required=True,
-                                 widget=forms.TextInput(attrs={'class': 'form-control'}))
+                                 widget=forms.TextInput(attrs={'class': 'form-control', "placeholder": "First Name"}))
     last_name = forms.CharField(min_length=5, max_length=30, required=True,
-                                widget=forms.TextInput(attrs={'class': 'form-control'}))
+                                widget=forms.TextInput(attrs={'class': 'form-control', "placeholder": "Last Name"}))
     password1 = forms.CharField(min_length=5, max_length=50, required=True,
-                                widget=forms.PasswordInput(attrs={'class': 'form-control'}))
+                                widget=forms.PasswordInput(attrs={'class': 'form-control', "placeholder": "Password"}))
     password2 = forms.CharField(min_length=5, max_length=45, required=True,
-                                widget=forms.PasswordInput(attrs={'class': 'form-control'}))
+                                widget=forms.PasswordInput(attrs={'class': 'form-control', "placeholder": "Confirm Password"}))
     #role=forms.ChoiceField(min_length=5, max_length=50, required=True,
                      #    choices=User.ROLE_CHOICES, widget=forms.Select())
     class Meta:
@@ -25,11 +25,17 @@ class RegistrationForm(UserCreationForm):
 
 
 class ChangePasswordForm(UserChangeForm):
-    password1 = forms.CharField(min_length=5, max_length=50, required=True,)
-    password2 = forms.CharField(min_length=5, max_length=45, required=True,)
+    old_password = forms.CharField(min_length=5, max_length=50, required=True, label='Password',
+                                widget = forms.PasswordInput(attrs={'class': 'form-control', 'placeholder': 'Password'}))
+    new_password = forms.CharField(min_length=5, max_length=45, required=True,label='Confirm Password',
+                                widget=forms.PasswordInput(attrs={'class': 'form-control', 'placeholder':
+                                    'New Password'}))
+    new_password1 = forms.CharField(min_length=5, max_length=45, required=True,label='Confirm Password',
+                                widget=forms.PasswordInput(attrs={'class': 'form-control', 'placeholder':
+                                    'Confirm New Password'}))
     class Meta:
         model = User
-        fields = ('password1', 'password2')
+        fields = ('old_password', 'new_password','new_password1')
 
 
 
