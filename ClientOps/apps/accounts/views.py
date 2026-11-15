@@ -3,7 +3,7 @@ from django.contrib.auth import authenticate, login, get_user_model, logout
 from django.contrib.auth.decorators import login_required, user_passes_test
 from django.contrib.auth import update_session_auth_hash
 from django.contrib import messages
-from .forms import LoginForm, RegistrationForm, ChangePasswordForm
+from .forms import LoginForm, RegistrationForm
 from django.contrib.auth.forms import PasswordChangeForm
 import structlog
 from ..employee.models import Employee
@@ -75,12 +75,12 @@ def logout_user(request):
 
 @user_passes_test(is_admin)
 def signupuser(request):
-    #logger.info("Method: %s | GET: %s | POST: %s | URL: %s | User: %s",
-     #           request.method,
-      #          request.GET,
-       #         request.POST,
-        #        request.path,
-         #       )
+    logger.info("Method: %s | GET: %s | POST: %s | URL: %s | User: %s",
+                request.method,
+                request.GET,
+                request.POST,
+                request.path,
+                )
     if request.method == 'POST':
 
         form = RegistrationForm( data=request.POST)

@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>client_create</title>
+</head>
+<body>
+
+
+<form method="POST" action ="{% url 'client_create' %}">
+        {% csrf_token %}
+        {{ form }}
+    <button type="submit">Save</button>
+
+
+
+</form>
+
+</body>
+</html>

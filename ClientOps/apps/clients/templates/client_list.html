@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<ul>
+    {% csrf_token %}
+    <li><a href="accounts/logout/" roole="button">logout</a></li>
+
+
+<ul>
+    {% for client in clients %}
+    <li>
+        <h2>{{ client.name_ar }} {{client.name_en }}</h2>
+
+
+    </li>
+    {% empty %}
+    <li>
+        <h2>No clients to display</h2>
+    </li>
+    {% endfor %}
+</ul>
+
+</ul>
+</body>
+</html>

@@ -24,20 +24,6 @@ class RegistrationForm(UserCreationForm):
         fields = ( 'email', 'first_name', 'last_name', 'password1', 'password2', 'role')
 
 
-class ChangePasswordForm(UserChangeForm):
-    old_password = forms.CharField(min_length=5, max_length=50, required=True, label='Password',
-                                widget = forms.PasswordInput(attrs={'class': 'form-control', 'placeholder': 'Password'}))
-    new_password = forms.CharField(min_length=5, max_length=45, required=True,label='Confirm Password',
-                                widget=forms.PasswordInput(attrs={'class': 'form-control', 'placeholder':
-                                    'New Password'}))
-    new_password1 = forms.CharField(min_length=5, max_length=45, required=True,label='Confirm Password',
-                                widget=forms.PasswordInput(attrs={'class': 'form-control', 'placeholder':
-                                    'Confirm New Password'}))
-    class Meta:
-        model = User
-        fields = ('old_password', 'new_password','new_password1')
-
-
 
 class LoginForm(AuthenticationForm):
     username =  forms.EmailField(

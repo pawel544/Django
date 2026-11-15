@@ -1,7 +1,7 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib import messages
-from ClientOps.apps.clients.forms import ClientForm
-from models import Client, ServiceType
+from .forms import ClientForm
+from .models import Client, ServiceType
 from django.contrib.auth.decorators import login_required, user_passes_test
 from django.db.models import Q
 from django.utils.dateparse import parse_date
@@ -13,8 +13,8 @@ from ..accounts.views import is_admin
 @login_required
 def client_list(request):
     if request.method == 'GET':
-        client = Client.objects.all( )
-        return render(request, "client_list.html", {'clients': client})
+        clients = Client.objects.all( )
+        return render(request, "client_list.html", {'client': clients})
 
 @login_required
 def client_create(request):
