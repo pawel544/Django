@@ -12,9 +12,13 @@ from ..accounts.views import is_admin
 
 @login_required
 def client_list(request):
-    if request.method == 'GET':
-        clients = Client.objects.all( )
-        return render(request, "client_list.html", {'clients': clients})
+
+    active=request.GET.get('active','1')=='0'
+
+
+
+    clients = Client.objects.filter(deleted_at__isnull=not active).all( )
+    return render(request, "client_list.html", {'clients': clients, 'active': active})
 
 @login_required
 def client_create(request):
@@ -29,7 +33,7 @@ def client_create(request):
     return render(request, "client_create.html", {'form': form})
 
 @login_required
-def client_edit(request, code=4424334):
+def client_edit(request, code):
     client = get_object_or_404(Client , code= code)
     if client.manager != request.user and not is_admin(request.user):
         messages.error(request, "You cannot edit this client")
@@ -63,7 +67,7 @@ def removal_client(request, code):
         client.save(update_fields=['deleted_at'])
         messages.success(request, "Client removed successfully.")
         return redirect("client_list")
-    return render(request, "removal_client.html", {'client': client})
+    return render(request, "client_edit.html", {'client': client})
 
 
 @login_required

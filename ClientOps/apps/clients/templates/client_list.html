@@ -1,23 +1,34 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns="http://www.w3.org/1999/html">
 <head>
     <meta charset="UTF-8">
     <title>Title</title>
 </head>
 <body>
 <ul>
-    {% csrf_token %}
     <li><a href="accounts/logout/" role="button">logout</a></li>
-
-
+    <li>
+        <form method="GET">
+            <div>
+                <input type="checkbox" id="active" name="active" value="0" {% if active %}checked{% endif %}
+                       onchange="this.form.submit()"/>
+                <label for="active">Nieaktywni użytkownicy</label>
+            </div>
+        </form>
+    </li>
+</ul>
 <ul>
     {% for client in clients %}
     <li>
 
+
         <h2>{{ client.name_ar }} {{client.name_en }}| TAX-NUMBER {{client.tax_number}}| Status {{client.status}}
        | Usługa {{client.service}}| Utworzono {{client.created_at}}| Osoba nadzorcza {{client.manager}}
         <a href="{% url 'client_edit' client.code %}" role="button">edit</a></h2>
-
+        <form method="POST" action="{% url 'removal_client' client.code %}">
+            {% csrf_token %}
+            <button role="button">remove</button>
+        </form>
 
     </li>
     {% empty %}
