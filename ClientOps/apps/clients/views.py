@@ -14,7 +14,7 @@ from ..accounts.views import is_admin
 def client_list(request):
     if request.method == 'GET':
         clients = Client.objects.all( )
-        return render(request, "client_list.html", {'client': clients})
+        return render(request, "client_list.html", {'clients': clients})
 
 @login_required
 def client_create(request):
@@ -29,7 +29,7 @@ def client_create(request):
     return render(request, "client_create.html", {'form': form})
 
 @login_required
-def client_edit(request, code):
+def client_edit(request, code=4424334):
     client = get_object_or_404(Client , code= code)
     if client.manager != request.user and not is_admin(request.user):
         messages.error(request, "You cannot edit this client")

@@ -7,20 +7,25 @@
 <body>
 <ul>
     {% csrf_token %}
-    <li><a href="accounts/logout/" roole="button">logout</a></li>
+    <li><a href="accounts/logout/" role="button">logout</a></li>
 
 
 <ul>
     {% for client in clients %}
     <li>
-        <h2>{{ client.name_ar }} {{client.name_en }}</h2>
+
+        <h2>{{ client.name_ar }} {{client.name_en }}| TAX-NUMBER {{client.tax_number}}| Status {{client.status}}
+       | Usługa {{client.service}}| Utworzono {{client.created_at}}| Osoba nadzorcza {{client.manager}}
+        <a href="{% url 'client_edit' client.code %}" role="button">edit</a></h2>
 
 
     </li>
     {% empty %}
     <li>
+
         <h2>No clients to display</h2>
     </li>
+
     {% endfor %}
 </ul>
 

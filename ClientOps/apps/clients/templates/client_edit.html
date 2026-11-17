@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Edit</title>
+</head>
+<form method="POST">
+    {% csrf_token %}
+    <ul>
+        <li><a href="accounts/logout/" role="button">logout</a></li>
+    </ul>
+    <body>
+    {{form.as_p}}
+    <button type="submit"> SUBMIT</button>
+    </body>
+</form>
+
+</html>

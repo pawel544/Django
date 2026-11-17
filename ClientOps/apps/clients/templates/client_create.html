@@ -7,7 +7,7 @@
 <body>
 
 
-<form method="POST" action ="{% url 'client_create' %}">
+<form method="POST">
         {% csrf_token %}
         {{ form }}
     <button type="submit">Save</button>
