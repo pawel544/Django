@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" xmlns="http://www.w3.org/1999/html">
+<html lang="en" xmlns="http://www.w3.org/1999/html" xmlns="http://www.w3.org/1999/html">
 <head>
     <meta charset="UTF-8">
     <title>Title</title>
@@ -7,12 +7,80 @@
 <body>
 <ul>
     <li><a href="accounts/logout/" role="button">logout</a></li>
+    <fildset>
+    <div>
+        <form method="GET" action="{% url 'filter_client' %}">
+            <label for="code_from"> Code From</label>
+            <input type="range" id="code_from" name="code_from" min="0" max="10000" step="1" value="0"
+            oninput="checkCodeRange()">
+            <output id="code_from_output">0</output>
+
+            <label for="code_to"> Code To</label>
+            <input type="range" id ="code_to" name="code_to" min="0" max="10000" step="1" value="0"
+                  oninput="checkCodeRange()"/>
+            <output id="code_to_output">0</output>
+
+            <label for="tax_number_from"> NIP from</label>
+            <input type="range" id ="tax_number_from" name="tax_number_from" min="0" max="10000000" value="0"
+                   oninput="checkTaxRange()"/>
+            <output id="tax_number_from_output">0</output>
+
+            <label for="tax_number_from">NIP to</label>
+            <input type="range" id ="tax_number_to" name="tax_number_to" min="0" max="10000000" value="10000000"
+                   oninput="checkTaxRange()"/>
+            <output id="tax_number_to_output">10000000</output>
+
+            <label>Email managera:</label>
+            <input type="text" name="manager">
+
+            <label>Status:</label>
+            <select name="status">
+                <option value="">Wszystkie</option>
+                <option value="open">Open</option>
+                <option value="closed">Closed</option>
+            </select>
+            <label>
+                <input type="checkbox" name="status_deleted" value="1">
+                Nieaktywni klienci
+            </label>
+            <button type="submit">Filter</button>
+
+
+        </form>
+        <script>
+            function checkCodeRange() {
+        const from = document.getElementById('code_from');
+        const to = document.getElementById('code_to');
+
+        from.max = to.value;
+        to.min = from.value;
+
+        document.getElementById('code_from_output').value = from.value;
+        document.getElementById('code_to_output').value = to.value;
+    }
+
+    function checkTaxRange() {
+        const from = document.getElementById('tax_number_from');
+        const to = document.getElementById('tax_number_to');
+
+        from.max = to.value;
+        to.min = from.value;
+
+        document.getElementById('tax_number_from_output').value = from.value;
+        document.getElementById('tax_number_to_output').value = to.value;}
+        </script>
+    </div>
+
+
+    </fildset>
+
+
     <li>
         <form method="GET">
             <div>
-                <input type="checkbox" id="active" name="active" value="0" {% if active %}checked{% endif %}
-                       onchange="this.form.submit()"/>
-                <label for="active">Nieaktywni użytkownicy</label>
+                <input type="checkbox" id="status_deleted" name="status_deleted" value="0"
+                       {% if status_deleted %}checked{% endif %} onchange="this.form.submit()"/>
+                <label for="status_deleted">Nieaktywni użytkownicy</label>
             </div>
         </form>
     </li>
@@ -25,10 +93,12 @@
         <h2>{{ client.name_ar }} {{client.name_en }}| TAX-NUMBER {{client.tax_number}}| Status {{client.status}}
        | Usługa {{client.service}}| Utworzono {{client.created_at}}| Osoba nadzorcza {{client.manager}}
         <a href="{% url 'client_edit' client.code %}" role="button">edit</a></h2>
+        {% if not status_deleted %}
         <form method="POST" action="{% url 'removal_client' client.code %}">
             {% csrf_token %}
             <button role="button">remove</button>
         </form>
+        {% endif %}
 
     </li>
     {% empty %}

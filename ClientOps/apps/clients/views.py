@@ -13,12 +13,12 @@ from ..accounts.views import is_admin
 @login_required
 def client_list(request):
 
-    active=request.GET.get('active','1')=='0'
+    status_deleted=request.GET.get('status_deleted','1')=='0'
 
 
 
-    clients = Client.objects.filter(deleted_at__isnull=not active).all( )
-    return render(request, "client_list.html", {'clients': clients, 'active': active})
+    clients = Client.objects.filter(deleted_at__isnull=not status_deleted).all( )
+    return render(request, "client_list.html", {'clients': clients, 'status_deleted': status_deleted})
 
 @login_required
 def client_create(request):
@@ -96,13 +96,14 @@ def filter_client(request):
         clients = clients.filter(manager__email=manager)
     if status:
         clients = clients.filter(status=status)
-    return render(request, "client_list.html", {'clients': clients})
+    return render(request, "client_list.html", {'clients': clients,
+                                                "filters": request.GET})
 
 @login_required
 def search_client(request):
     search = request.GET.get('search')
     status_deleted = request.GET.get('status_deleted')
-    if status_deleted:
+    if status_deleted == "1":
         clients = Client.objects.filter(deleted_at__isnull=False)
     else:
         clients = Client.objects.filter(deleted_at__isnull=True)
