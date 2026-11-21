@@ -13,12 +13,14 @@ from ..accounts.views import is_admin
 @login_required
 def client_list(request):
 
-    status_deleted=request.GET.get('status_deleted','1')=='0'
+    show_all_deleted=request.GET.get('show_all_deleted','1')=='0'
 
 
 
-    clients = Client.objects.filter(deleted_at__isnull=not status_deleted).all( )
-    return render(request, "client_list.html", {'clients': clients, 'status_deleted': status_deleted})
+    clients = Client.objects.filter(deleted_at__isnull= not show_all_deleted).all( )
+    return render(request, "client_list.html", {'clients': clients,
+                                                'show_all_deleted': show_all_deleted,
+                                                'filters': request.GET})
 
 @login_required
 def client_create(request):
@@ -101,12 +103,12 @@ def filter_client(request):
 
 @login_required
 def search_client(request):
-    search = request.GET.get('search')
-    status_deleted = request.GET.get('status_deleted')
-    if status_deleted == "1":
-        clients = Client.objects.filter(deleted_at__isnull=False)
-    else:
-        clients = Client.objects.filter(deleted_at__isnull=True)
+    search = request.GET.get('search', '').strip()
+    search_deleted = request.GET.get('status_deleted')=="0"
+
+    clients = Client.objects.filter(deleted_at__isnull= not 'search_deleted')
+
+
     if search:
         query = (Q(code__icontains=search) |
                                 Q(name_ar__icontains=search) |
@@ -125,12 +127,13 @@ def search_client(request):
                       Q(created_at__date=data_search))
 
         clients = clients.filter(query)
+    clients = clients.order_by('code')
 
-
-    return render(request, "client_list.html", {'clients': clients})
+    return render(request, "client_list.html", {'clients': clients,'search':search,
+                                                'search_deleted':search_deleted,  'status_deleted': search_deleted})
 
 @login_required
 def services(request):
 
     services = ServiceType.objects.all()
-    return render(request, "services.html", {'service': services})
+    return render(request, "services.html", {'service': services,})

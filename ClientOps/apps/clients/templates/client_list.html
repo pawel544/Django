@@ -1,115 +1,622 @@
 <!DOCTYPE html>
-<html lang="en" xmlns="http://www.w3.org/1999/html" xmlns="http://www.w3.org/1999/html">
+<html lang="pl">
+
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>List Clients</title>
+
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+        }
+
+        /* FILTER BUTTON */
+
+        #toggleFilters {
+            padding: 10px 20px;
+            cursor: pointer;
+            border: none;
+            border-radius: 5px;
+            background-color: #007bff;
+            color: white;
+            font-size: 15px;
+        }
+
+        #toggleFilters:hover {
+            background-color: #0056b3;
+        }
+
+        /* FILTER PANEL */
+
+        .filter-panel {
+            display: none;
+            padding: 20px;
+            margin-top: 10px;
+            border: 1px solid #ccc;
+            border-radius: 8px;
+            background-color: #f8f9fa;
+        }
+
+        .filter-panel.active {
+            display: block;
+        }
+
+        /* FILTER ELEMENTS */
+
+        .filter-group {
+            margin-bottom: 15px;
+        }
+
+        .filter-group label {
+            display: inline-block;
+            margin: 5px;
+        }
+
+        input[type="range"] {
+            vertical-align: middle;
+        }
+
+        output {
+            display: inline-block;
+            min-width: 70px;
+            font-weight: bold;
+        }
+
+        /* BUTTONS */
+
+        button {
+            cursor: pointer;
+        }
+
+        .filter-submit {
+            padding: 10px 20px;
+            background-color: #28a745;
+            color: white;
+            border: none;
+            border-radius: 5px;
+        }
+
+        .clear-button {
+            margin-left: 10px;
+        }
+
+        /* CLIENT LIST */
+
+        .client-list li {
+            margin-bottom: 20px;
+            padding: 10px;
+            border-bottom: 1px solid #ddd;
+        }
+
+    </style>
+
 </head>
+
 <body>
-<ul>
-    <li><a href="accounts/logout/" role="button">logout</a></li>
-    <fildset>
+
+    <h1>List Clients</h1>
+
     <div>
-        <form method="GET" action="{% url 'filter_client' %}">
-            <label for="code_from"> Code From</label>
-            <input type="range" id="code_from" name="code_from" min="0" max="10000" step="1" value="0"
-            oninput="checkCodeRange()">
-            <output id="code_from_output">0</output>
-
-            <label for="code_to"> Code To</label>
-            <input type="range" id ="code_to" name="code_to" min="0" max="10000" step="1" value="0"
-                  oninput="checkCodeRange()"/>
-            <output id="code_to_output">0</output>
-
-            <label for="tax_number_from"> NIP from</label>
-            <input type="range" id ="tax_number_from" name="tax_number_from" min="0" max="10000000" value="0"
-                   oninput="checkTaxRange()"/>
-            <output id="tax_number_from_output">0</output>
-
-            <label for="tax_number_from">NIP to</label>
-            <input type="range" id ="tax_number_to" name="tax_number_to" min="0" max="10000000" value="10000000"
-                   oninput="checkTaxRange()"/>
-            <output id="tax_number_to_output">10000000</output>
-
-            <label>Email managera:</label>
-            <input type="text" name="manager">
-
-            <label>Status:</label>
-            <select name="status">
-                <option value="">Wszystkie</option>
-                <option value="open">Open</option>
-                <option value="closed">Closed</option>
-            </select>
-            <label>
-                <input type="checkbox" name="status_deleted" value="1">
-                Nieaktywni klienci
-            </label>
-            <button type="submit">Filter</button>
-
-
-        </form>
-        <script>
-            function checkCodeRange() {
-        const from = document.getElementById('code_from');
-        const to = document.getElementById('code_to');
-
-        from.max = to.value;
-        to.min = from.value;
-
-        document.getElementById('code_from_output').value = from.value;
-        document.getElementById('code_to_output').value = to.value;
-    }
-
-    function checkTaxRange() {
-        const from = document.getElementById('tax_number_from');
-        const to = document.getElementById('tax_number_to');
-
-        from.max = to.value;
-        to.min = from.value;
-
-        document.getElementById('tax_number_from_output').value = from.value;
-        document.getElementById('tax_number_to_output').value = to.value;}
-        </script>
+        <a href="accounts/logout" role="button">
+            Logout
+        </a>
     </div>
 
+    <!-- SEARCH CLIENTS -->
 
-    </fildset>
+    <section>
 
+        <h2>Search clients</h2>
 
-    <li>
-        <form method="GET">
+        <form method="GET" action="{% url 'search_client' %}">
+
+            <label for="search">
+                Search:
+            </label>
+
+            <input
+                type="search"
+                id="search"
+                name="search"
+                placeholder="Search client"
+                required
+            >
+
             <div>
-                <input type="checkbox" id="status_deleted" name="status_deleted" value="0"
-                       {% if status_deleted %}checked{% endif %} onchange="this.form.submit()"/>
-                <label for="status_deleted">Nieaktywni użytkownicy</label>
+                <input
+                    type="checkbox"
+                    id="search_deleted"
+                    name="search_deleted"
+                    value="0"
+                    {% if search_deleted %}checked{% endif %}
+                >
+
+                <label for="search_deleted">
+                    Uwzględnij nieaktywnych klientów
+                </label>
             </div>
+
+            <button type="submit">
+                Search
+            </button>
+
         </form>
-    </li>
-</ul>
-<ul>
-    {% for client in clients %}
-    <li>
 
+    </section>
 
-        <h2>{{ client.name_ar }} {{client.name_en }}| TAX-NUMBER {{client.tax_number}}| Status {{client.status}}
-       | Usługa {{client.service}}| Utworzono {{client.created_at}}| Osoba nadzorcza {{client.manager}}
-        <a href="{% url 'client_edit' client.code %}" role="button">edit</a></h2>
-        {% if not status_deleted %}
-        <form method="POST" action="{% url 'removal_client' client.code %}">
-            {% csrf_token %}
-            <button role="button">remove</button>
+    <!-- CLIENT FILTERS -->
+
+    <section>
+
+        <h2>Client filters</h2>
+
+        <button
+            type="button"
+            id="toggleFilters"
+            aria-expanded="false"
+            aria-controls="filterPanel"
+            onclick="toggleFilters()"
+        >
+            Pokaż filtry ▼
+        </button>
+
+        <div id="filterPanel" class="filter-panel">
+
+            <form method="GET" action="{% url 'filter_client' %}">
+
+                <fieldset>
+
+                    <legend>Filter clients</legend>
+
+                    <!-- CLIENT CODE -->
+
+                    <div class="filter-group">
+
+                        <h3>Client Code</h3>
+
+                        <label for="code_from">
+                            Code From:
+                        </label>
+
+                        <input
+                            type="range"
+                            id="code_from"
+                            name="code_from"
+                            min="0"
+                            max="10000"
+                            step="1"
+                            value="{{ request.GET.code_from|default:0 }}"
+                            oninput="checkCodeRange()"
+                        >
+
+                        <output id="code_from_output">
+                            {{ request.GET.code_from|default:0 }}
+                        </output>
+
+                        <br>
+
+                        <label for="code_to">
+                            Code To:
+                        </label>
+
+                        <input
+                            type="range"
+                            id="code_to"
+                            name="code_to"
+                            min="0"
+                            max="10000"
+                            step="1"
+                            value="{{ request.GET.code_to|default:10000 }}"
+                            oninput="checkCodeRange()"
+                        >
+
+                        <output id="code_to_output">
+                            {{ request.GET.code_to|default:10000 }}
+                        </output>
+
+                    </div>
+
+                    <!-- NIP -->
+
+                    <div class="filter-group">
+
+                        <h3>NIP</h3>
+
+                        <label for="tax_number_from">
+                            NIP From:
+                        </label>
+
+                        <input
+                            type="number"
+                            id="tax_number_from"
+                            name="tax_number_from"
+                            min="0"
+                            max="9999999999"
+                            step="1"
+                            value="{{ request.GET.tax_number_from|default:0 }}"
+                            oninput="checkTaxRange()"
+                        >
+
+                        <output id="tax_number_from_output">
+                            {{ request.GET.tax_number_from|default:0 }}
+                        </output>
+
+                        <br>
+
+                        <label for="tax_number_to">
+                            NIP To:
+                        </label>
+
+                        <input
+                            type="number"
+                            id="tax_number_to"
+                            name="tax_number_to"
+                            min="0"
+                            max="9999999999"
+                            step="1"
+                            value="{{ request.GET.tax_number_to|default:9999999999 }}"
+                            oninput="checkTaxRange()"
+                        >
+
+                        <output id="tax_number_to_output">
+                            {{ request.GET.tax_number_to|default:9999999999 }}
+                        </output>
+
+                    </div>
+
+                    <!-- MANAGER -->
+
+                    <div class="filter-group">
+
+                        <label for="manager">
+                            Email managera:
+                        </label>
+
+                        <input
+                            type="text"
+                            id="manager"
+                            name="manager"
+                            value="{{ request.GET.manager|default:'' }}"
+                            placeholder="Manager email"
+                        >
+
+                    </div>
+
+                    <!-- STATUS -->
+
+                    <div class="filter-group">
+
+                        <label for="status">
+                            Status:
+                        </label>
+
+                        <select id="status" name="status">
+
+                            <option value="">
+                                Wszystkie
+                            </option>
+
+                            <option
+                                value="open"
+                                {% if request.GET.status == 'open' %}selected{% endif %}
+                            >
+                                Open
+                            </option>
+
+                            <option
+                                value="closed"
+                                {% if request.GET.status == 'closed' %}selected{% endif %}
+                            >
+                                Closed
+                            </option>
+
+                        </select>
+
+                    </div>
+
+                    <!-- DELETED CLIENTS -->
+
+                    <div class="filter-group">
+
+                        <label for="status_deleted">
+
+                            <input
+                                type="checkbox"
+                                id="status_deleted"
+                                name="status_deleted"
+                                value="0"
+                                {% if status_deleted %}checked{% endif %}
+                            >
+
+                            Nieaktywni klienci
+
+                        </label>
+
+                    </div>
+
+                    <!-- FILTER BUTTONS -->
+
+                    <div>
+
+                        <button
+                            type="submit"
+                            class="filter-submit"
+                        >
+                            Filter
+                        </button>
+
+                        <a
+                            href="{% url 'filter_client' %}"
+                            class="clear-button"
+                        >
+                            Clear filters
+                        </a>
+
+                    </div>
+
+                </fieldset>
+
+            </form>
+
+        </div>
+
+    </section>
+
+    <!-- SHOW DELETED CLIENTS -->
+
+    <section>
+
+        <form method="GET">
+
+            <div>
+
+                <input
+                    type="checkbox"
+                    id="show_all_deleted"
+                    name="show_all_deleted"
+                    value="0"
+                    {% if status_deleted %}checked{% endif %}
+                    onchange="this.form.submit()"
+                >
+
+                <label for="show_all_deleted">
+                    Nieaktywni użytkownicy
+                </label>
+
+            </div>
+
         </form>
-        {% endif %}
 
-    </li>
-    {% empty %}
-    <li>
+        <h2>Clients</h2>
 
-        <h2>No clients to display</h2>
-    </li>
+        <ul class="client-list">
 
-    {% endfor %}
-</ul>
+            {% for client in clients %}
 
-</ul>
+                <li>
+
+                    <h3>
+
+                        {{ client.name_ar }}
+
+                        {{ client.name_en }}
+
+                        | TAX-NUMBER: {{ client.tax_number }}
+
+                        | Status: {{ client.status }}
+
+                        | Usługa: {{ client.service }}
+
+                        | Utworzono: {{ client.created_at }}
+
+                        | Osoba nadzorcza: {{ client.manager }}
+
+                    </h3>
+
+                    <!-- EDIT CLIENT -->
+
+                    <a
+                        href="{% url 'client_edit' client.code %}"
+                        role="button"
+                    >
+                        Edit
+                    </a>
+
+                    <!-- REMOVE CLIENT -->
+
+                    {% if not status_deleted %}
+
+                        <form
+                            method="POST"
+                            action="{% url 'removal_client' client.code %}"
+                        >
+
+                            {% csrf_token %}
+
+                            <button
+                                type="submit"
+                                onclick="return confirm('Czy na pewno chcesz usunąć tego klienta?');"
+                            >
+                                Remove
+                            </button>
+
+                        </form>
+
+                    {% endif %}
+
+                </li>
+
+            {% empty %}
+
+                <li>
+
+                    <h3>No clients to display</h3>
+
+                </li>
+
+            {% endfor %}
+
+        </ul>
+
+    </section>
+
+    <!-- JAVASCRIPT -->
+
+    <script>
+
+        /* SHOW / HIDE FILTERS */
+
+        function toggleFilters() {
+
+            const panel = document.getElementById('filterPanel');
+
+            const button = document.getElementById('toggleFilters');
+
+            panel.classList.toggle('active');
+
+            const isOpen = panel.classList.contains('active');
+
+            button.textContent = isOpen
+                ? 'Ukryj filtry ▲'
+                : 'Pokaż filtry ▼';
+
+            button.setAttribute('aria-expanded', isOpen);
+
+        }
+
+
+        /* KEEP INPUT RANGES CONSISTENT */
+
+        function syncRange(
+            fromId,
+            toId,
+            fromOutputId,
+            toOutputId
+        ) {
+
+            const from = document.getElementById(fromId);
+
+            const to = document.getElementById(toId);
+
+            if (!from || !to) return;
+
+            const min = Number(
+                from.getAttribute('min') || 0
+            );
+
+            const max = Number(
+                to.getAttribute('max') ||
+                from.getAttribute('max') ||
+                0
+            );
+
+            let fromValue = Number(from.value);
+
+            let toValue = Number(to.value);
+
+            if (!Number.isFinite(fromValue)) {
+                fromValue = min;
+            }
+
+            if (!Number.isFinite(toValue)) {
+                toValue = max;
+            }
+
+            fromValue = Math.min(
+                Math.max(fromValue, min),
+                max
+            );
+
+            toValue = Math.min(
+                Math.max(toValue, min),
+                max
+            );
+
+            if (fromValue > toValue) {
+
+                if (document.activeElement === from) {
+
+                    toValue = fromValue;
+
+                } else {
+
+                    fromValue = toValue;
+
+                }
+
+            }
+
+            from.value = fromValue;
+
+            to.value = toValue;
+
+            from.max = toValue;
+
+            to.min = fromValue;
+
+            const fromOutput =
+                document.getElementById(fromOutputId);
+
+            const toOutput =
+                document.getElementById(toOutputId);
+
+            if (fromOutput) {
+                fromOutput.value = fromValue;
+            }
+
+            if (toOutput) {
+                toOutput.value = toValue;
+            }
+
+        }
+
+
+        /* CHECK CODE RANGE */
+
+        function checkCodeRange() {
+
+            syncRange(
+                'code_from',
+                'code_to',
+                'code_from_output',
+                'code_to_output'
+            );
+
+        }
+
+
+        /* CHECK TAX RANGE */
+
+        function checkTaxRange() {
+
+            syncRange(
+                'tax_number_from',
+                'tax_number_to',
+                'tax_number_from_output',
+                'tax_number_to_output'
+            );
+
+        }
+
+
+        /* INITIALIZE */
+
+        document.addEventListener(
+            'DOMContentLoaded',
+            function() {
+
+                checkCodeRange();
+
+                checkTaxRange();
+
+            }
+        );
+
+    </script>
+
 </body>
+
 </html>
