@@ -1,7 +1,7 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib import messages
 from .forms import ClientForm
-from .models import Client, ServiceType
+from .models import Client, ServiceType, ClientService
 from django.contrib.auth.decorators import login_required, user_passes_test
 from django.db.models import Q
 from django.utils.dateparse import parse_date
