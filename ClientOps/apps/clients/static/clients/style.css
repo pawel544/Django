@@ -1,0 +1,122 @@
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+        }
+
+
+
+        #toggleFilters {
+            padding: 10px 20px;
+            cursor: pointer;
+            border: none;
+            border-radius: 5px;
+            background-color: #007bff;
+            color: white;
+            font-size: 15px;
+        }
+
+        #toggleFilters:hover {
+            background-color: #0056b3;
+        }
+
+
+
+        .filter-panel {
+            display: none;
+            padding: 20px;
+            margin-top: 10px;
+            border: 1px solid #ccc;
+            border-radius: 8px;
+            background-color: #f8f9fa;
+        }
+
+        .filter-panel.active {
+            display: block;
+        }
+
+
+
+        .filter-group {
+            margin-bottom: 15px;
+        }
+
+        .filter-group label {
+            display: inline-block;
+            margin: 5px;
+        }
+
+        input[type="range"] {
+            vertical-align: middle;
+        }
+
+        output {
+            display: inline-block;
+            min-width: 70px;
+            font-weight: bold;
+        }
+
+
+
+        button {
+            cursor: pointer;
+        }
+
+        .filter-submit {
+            padding: 10px 20px;
+            background-color: #28a745;
+            color: white;
+            border: none;
+            border-radius: 5px;
+        }
+
+        .clear-button {
+            margin-left: 10px;
+        }
+
+
+        .client-list li {
+            margin-bottom: 20px;
+            padding: 10px;
+            border-bottom: 1px solid #ddd;
+        }}
+.menu {
+    display: flex;
+    list-style: none;
+    background-color: #333;
+    padding: 0;
+    margin: 0;
+}
+
+.menu li {
+    position: relative;
+}
+
+.menu a {
+    display: block;
+    padding: 15px 20px;
+    color: white;
+    text-decoration: none;
+}
+
+.menu a:hover {
+    background-color: #555;
+}
+
+
+
+.submenu {
+    display: none;
+    position: absolute;
+    top: 100%;
+    left: 0;
+    min-width: 180px;
+    background-color: #333;
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    z-index: 100;
+}
+
+.dropdown:hover .submenu {
+    display: block;
+}

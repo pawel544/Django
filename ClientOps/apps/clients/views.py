@@ -18,7 +18,7 @@ def client_list(request):
 
 
     clients = Client.objects.filter(deleted_at__isnull= not show_all_deleted).all( )
-    return render(request, "client_list.html", {'clients': clients,
+    return render(request, "clients/client_list.html", {'clients': clients,
                                                 'show_all_deleted': show_all_deleted,
                                                 'filters': request.GET})
 
@@ -32,7 +32,7 @@ def client_create(request):
     else:
         form = ClientForm()
 
-    return render(request, "client_create.html", {'form': form})
+    return render(request, "clients/client_create.html", {'form': form})
 
 @login_required
 def client_edit(request, code):
@@ -48,7 +48,7 @@ def client_edit(request, code):
             return redirect("client_list")
     else:
         form = ClientForm(instance=client)
-    return render(request, "client_edit.html", {'form': form})
+    return render(request, "clients/client_edit.html", {'form': form})
 
 @user_passes_test(is_admin)
 def assignment_employee(request,email, code):
@@ -58,8 +58,8 @@ def assignment_employee(request,email, code):
         client.manager = employee
         client.save(update_fields=['manager'])
         messages.success(request, "Employee assigned successfully.")
-        return redirect("client_list")
-    return render(request, "assignment_employee.html", {'client': client,
+        return redirect("clients/client_list")
+    return render(request, "clients/assignment_employee.html", {'client': client,
                                                                 'employee': employee})
 @login_required
 def removal_client(request, code):
@@ -69,7 +69,7 @@ def removal_client(request, code):
         client.save(update_fields=['deleted_at'])
         messages.success(request, "Client removed successfully.")
         return redirect("client_list")
-    return render(request, "client_edit.html", {'client': client})
+    return render(request, "clients/client_edit.html", {'client': client})
 
 
 @login_required
@@ -98,7 +98,7 @@ def filter_client(request):
         clients = clients.filter(manager__email=manager)
     if status:
         clients = clients.filter(status=status)
-    return render(request, "client_list.html", {'clients': clients,
+    return render(request, "clients/client_list.html", {'clients': clients,
                                                 "filters": request.GET})
 
 @login_required
@@ -129,7 +129,7 @@ def search_client(request):
         clients = clients.filter(query)
     clients = clients.order_by('code')
 
-    return render(request, "client_list.html", {'clients': clients,'search':search,
+    return render(request, "clients/client_list.html", {'clients': clients,'search':search,
                                                 'search_deleted':search_deleted,  'status_deleted': search_deleted})
 
 @login_required
