@@ -2,12 +2,12 @@ from django.db import transaction
 from django.shortcuts import render, redirect, get_object_or_404
 from ..employee.forms import EmployeeForm
 from ..employee.models import Employee
-from models import RegistrationBlock
+from .models import RegistrationBlock
 
 # Create your views here.
 
 
-def create_emloyy(request):
+def create_employ(request):
     if request.method == 'POST':
         form = EmployeeForm(request.POST)
 
@@ -18,11 +18,11 @@ def create_emloyy(request):
                                   status= RegistrationBlock.Status.PENDING,
                                   missing_information= form.cleaned_data['missing_information'],
                                     reason= form.cleaned_data['reason'],)
-                return redirect('employee_list')
+                return redirect('employ')
     else:
         form = EmployeeForm()
 
-    return render(request, "registration_gate/employee.html",
+    return render(request, "registration_gate/employ.html",
         {"form": form}
     )
 
