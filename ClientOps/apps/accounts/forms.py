@@ -17,8 +17,8 @@ class RegistrationForm(UserCreationForm):
                                 widget=forms.PasswordInput(attrs={'class': 'form-control', "placeholder": "Password"}))
     password2 = forms.CharField(min_length=5, max_length=45, required=True,
                                 widget=forms.PasswordInput(attrs={'class': 'form-control', "placeholder": "Confirm Password"}))
-    #role=forms.ChoiceField(min_length=5, max_length=50, required=True,
-                     #    choices=User.ROLE_CHOICES, widget=forms.Select())
+    role=forms.ChoiceField( required=True,
+                        choices=User.ROLE_CHOICES, widget=forms.Select())
     class Meta:
         model = User
         fields = ( 'email', 'first_name', 'last_name', 'password1', 'password2', 'role')

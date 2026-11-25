@@ -13,7 +13,7 @@ logger = structlog.get_logger(__name__)
 User = get_user_model()
 def is_admin(user):
     return (user.is_authenticated and
-            user.role== "Admin" )
+            user.role in [ "Admin" , 'Supervisor', 'supervisor'] )
 
 def login_user(request):
     logger.info(
@@ -24,7 +24,7 @@ def login_user(request):
         getattr(request.user, "email", "AnonymousUser")
     )
     if request.user.is_authenticated :
-        return redirect(to='signupuser.html')
+        return redirect(to='client_list')
 
     if request.method == 'POST':
         form = LoginForm(request=request, data=request.POST)
@@ -44,7 +44,7 @@ def login_user(request):
             if user.first_login:
                 return redirect('/change_password')
 
-            return redirect('/signupuser.html')
+            return redirect('/signupuser')
 
         else:
             if user:
@@ -61,7 +61,7 @@ def login_user(request):
                 messages.error(request, 'Email or password did not match')
     else:
         form = LoginForm()
-    return render(request ,'login.html', context={'form':form})
+    return render(request ,'login', context={'form':form})
 @login_required
 def logout_user(request):
     logger.info("Method: %s | GET: %s | POST: %s | URL: %s | User: %s",
@@ -75,7 +75,7 @@ def logout_user(request):
 
 @user_passes_test(is_admin)
 def signupuser(request):
-    logger.info("Method: %s | GET: %s | POST: %s | URL: %s | User: %s",
+    logger.info("Method: %s | GET: %s | POST: %s | URL: %s ",
                 request.method,
                 request.GET,
                 request.POST,
@@ -87,7 +87,7 @@ def signupuser(request):
         if form.is_valid():
             form.save()
             messages.success(request, 'Account created successfully')
-            return redirect('user:register')
+            return redirect('user:signupuser.html')
     else:
        form = RegistrationForm()
     return render(request ,'signupuser.html', context={'form':form})
