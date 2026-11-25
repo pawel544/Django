@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <title>Edit</title>
-      <link rel="stylesheet" href="{% static 'clients/style.css' %}">
+     <link rel="stylesheet" href="{% static 'registration_gate/style.css' %}">
 </head>
 <h1>Client Edit</h1>
 <form method="POST">
@@ -21,6 +21,13 @@
                 <li><a href="accounts/logout">Logout</a></li>
 
                 <li><a href="{% url 'client_create' %}">Client create</a></li>
+            </ul>
+        </li>
+        <li class="dropdown">
+            <a href="#">EMPLOY▼</a>
+            <ul class="submenu">
+                <li><a href="{% url 'show_all_block_employees' %}">All Block Employ</a></li>
+                <li><a href="{% url 'create_employ' %}">Create Employ</a></li>
             </ul>
         </li>
     </ul>

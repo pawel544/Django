@@ -10,6 +10,7 @@
 
 
 
+    <link rel="stylesheet" href="{% static 'registration_gate/style.css' %}">
     <link rel="stylesheet" href="{% static 'clients/style.css' %}">
 
 </head>
@@ -31,6 +32,14 @@
                 <li><a href="accounts/logout">Logout</a></li>
 
                 <li><a href="client_create">Client create</a></li>
+            </ul>
+        </li>
+        <li class="dropdown">
+            <a href="#">EMPLOY▼</a>
+            <ul class="submenu">
+                <li><a href="{% url 'show_all_block_employees' %}">All Block Employ</a></li>
+                <li><a href="{% url 'create_employ' %}">Create Employ</a></li>
+
             </ul>
         </li>
     </ul>
@@ -299,7 +308,7 @@
 
 
     <section>
-
+        <h2>Clients</h2>
         <form method="GET">
 
             <div>
@@ -308,8 +317,8 @@
                     type="checkbox"
                     id="show_all_deleted"
                     name="show_all_deleted"
-                    value="0"
-                    {% if status_deleted %}checked{% endif %}
+                    value="1"
+                    {% if show_all_deleted %}checked{% endif %}
                     onchange="this.form.submit()"
                 >
 
@@ -321,7 +330,7 @@
 
         </form>
 
-        <h2>Clients</h2>
+
 
         <ul class="client-list">
 
@@ -358,7 +367,7 @@
 
 
 
-                    {% if not status_deleted %}
+                    {% if not show_all_deleted %}
 
                         <form
                             method="POST"

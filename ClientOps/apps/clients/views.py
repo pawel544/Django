@@ -13,7 +13,7 @@ from ..accounts.views import is_admin
 @login_required
 def client_list(request):
 
-    show_all_deleted=request.GET.get('show_all_deleted','1')=='0'
+    show_all_deleted=request.GET.get('show_all_deleted','0')=='1'
 
 
 
