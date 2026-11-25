@@ -11,7 +11,7 @@
 <nav>
     <ul class="menu">
         <li>
-            <a href="client_list">Strona główna</a>
+            <a href="{% url 'client_list' %}">Strona główna</a>
         </li>
 
         <li class="dropdown">
@@ -24,11 +24,21 @@
 
             </ul>
         </li>
+        </li>
+        <li class="dropdown">
+            <a href="#">EMPLOY▼</a>
+            <ul class="submenu">
+                <li><a href="{% url 'show_all_block_employees' %}">All Block Employ</a></li>
+                <li><a href="{% url 'client_create' %}">Client create</a></li>
+            </ul>
+        </li>
     </ul>
 </nav>
 <form method="POST">
     {% csrf_token %}
+    {{employee}}
     {{form.as_p}}
+    {{form.error}}
     <button type="submit">SAVE</button>
 
 
