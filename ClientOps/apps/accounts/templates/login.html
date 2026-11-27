@@ -5,18 +5,21 @@
 </head>
 <html lang="en">
 <body>
+
     {% block content %}
     {% if messages %}
     <div>
         {% for message in messages %}
-        <div {% if message.tags %} class="alert-{{ message.tags}}}" {% endif %}></div>
+        <div {% if message.tags %} class="alert-{{ message.tags}}" {% endif %}></div>
+                {{ message }}
         {% endfor %}
     </div>
     {% endif %}
-    <form action="{% url 'accounts:login' %}" method="post">
+
+    <form action="{% url 'accounts:login' %}" method="POST">
         {% csrf_token %}
         <div>
-            <label>
+            <label >
                 Email
             </label>
                 {{ form.username }}
@@ -26,7 +29,9 @@
         <div>
             <label >
                 Password:
-            {{ form.password }}
+                {{ form.password }}
+                {{ form.password.error }}
+
         </label>
         </div>
         <div class="grid">
